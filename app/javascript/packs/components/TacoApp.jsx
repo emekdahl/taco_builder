@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from "axios";
-import Tacos from "./Tacos";
-import Taco from "./Taco";
-import TacoForm from "./TacoForm";
+import axios from 'axios';
+import Tacos from './Tacos';
+import Taco from './Taco';
+import TacoForm from './TacoForm';
+import _ from 'lodash';
 
 class TacoApp extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class TacoApp extends React.Component {
 
   getTacos() {
     axios
-      .get("/api/v1/tacos")
+      .get('/api/v1/tacos')
       .then(response => {
         const tacos = response.data;
         this.setState({ tacos });
