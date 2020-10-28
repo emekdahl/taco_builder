@@ -1,0 +1,1 @@
+json.extract! taco, :id, :title, :user_id, :base, :filling, :sauce, :garnish, :created_at, :updated_at

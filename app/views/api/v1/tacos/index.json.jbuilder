@@ -1,0 +1,1 @@
+json.array! @tacos, partial: "api/v1/tacos/taco", as: :taco
