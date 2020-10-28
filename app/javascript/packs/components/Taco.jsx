@@ -1,11 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import axios from 'axios'
+import setAxiosHeaders from './AxiosHeaders'
+
 class Taco extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       complete: this.props.taco.complete,
+    }
+    this.handleDestroy = this.handleDestroy.bind(this);
+    this.path = `/api/v1/tacos/${this.props.taco.id}`;
+  }
+
+  handleDestroy() {
+    setAxiosHeaders();
+    const confirmation = confirm("Are you sure?");
+    if (confirmation) {
+      axios
+        .delete(this.path)
+        .then(response => {
+          this.props.getTacos();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
   render() {
@@ -58,7 +78,12 @@ class Taco extends React.Component {
           />
         </td>
         <td className="text-right">
-          <button className="btn btn-outline-danger">Delete</button>
+            <button 
+                onClick={this.handleDestroy}
+                className="btn btn-outline-danger"
+            >
+                Delete
+            </button>
         </td>
       </tr>
     )
@@ -69,4 +94,5 @@ export default Taco
 
 Taco.propTypes = {
   taco: PropTypes.object.isRequired,
+  getTodoItems: PropTypes.func.isRequired
 }
