@@ -37,9 +37,11 @@ class Taco extends React.Component {
           garnish: this.garnishRef.current.value,
         },
       })
-      .then((response) => {})
+      .then((response) => {
+        this.props.clearErrors();
+      })
       .catch((error) => {
-        console.log(error);
+        this.props.handleErrors();
       }, 1000);
   });
 
@@ -134,4 +136,5 @@ export default Taco;
 Taco.propTypes = {
   taco: PropTypes.object.isRequired,
   getTacos: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
 };

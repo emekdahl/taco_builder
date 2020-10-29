@@ -18,6 +18,8 @@ class TacoApp extends React.Component {
     };
     this.getTacos = this.getTacos.bind(this);
     this.createTaco = this.createTaco.bind(this);
+    this.handleErrors = this.handleErrors.bind(this);
+    this.clearErrors = this.clearErrors.bind(this);
   }
 
   componentDidMount() {
@@ -28,6 +30,7 @@ class TacoApp extends React.Component {
     axios
       .get("/api/v1/tacos")
       .then((response) => {
+        this.clearErrors();
         this.setState({ isLoading: true });
         const tacos = response.data;
         this.setState({ tacos });
@@ -35,13 +38,27 @@ class TacoApp extends React.Component {
       })
       .catch((error) => {
         this.setState({ isLoading: true });
-        console.log(error);
+        this.setState({
+          errorMessage: {
+            message: "There was an error loading your tacos...",
+          },
+        });
       });
   }
 
   createTaco() {
     const taco = [taco, ...this.state.tacos];
     this.setState({ tacos });
+  }
+
+  handleErrors(errorMessage) {
+    this.setState({ errorMessage });
+  }
+
+  clearErrors() {
+    this.setState({
+      errorMessage: null,
+    });
   }
 
   render() {
@@ -55,7 +72,13 @@ class TacoApp extends React.Component {
             <TacoForm createTaco={this.createTaco} />
             <Tacos>
               {this.state.tacos.map((taco) => (
-                <Taco key={taco.id} taco={taco} getTacos={this.getTacos} />
+                <Taco
+                  key={taco.id}
+                  taco={taco}
+                  getTacos={this.getTacos}
+                  handleErrors={this.handleErrors}
+                  clearErrors={this.clearErrors}
+                />
               ))}
             </Tacos>
           </>

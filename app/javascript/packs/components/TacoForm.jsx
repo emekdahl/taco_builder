@@ -1,24 +1,24 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import axios from 'axios'
-import setAxiosHeaders from "./AxiosHeaders"
+import React from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
+import setAxiosHeaders from "./AxiosHeaders";
 
 class TacoForm extends React.Component {
   constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.titleRef = React.createRef()
-    this.baseRef = React.createRef()
-    this.fillingRef = React.createRef()
-    this.garnishRef = React.createRef()
-    this.sauceRef = React.createRef()
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.titleRef = React.createRef();
+    this.baseRef = React.createRef();
+    this.fillingRef = React.createRef();
+    this.garnishRef = React.createRef();
+    this.sauceRef = React.createRef();
   }
 
   handleSubmit(e) {
-    e.preventDefault()
-    setAxiosHeaders()
+    e.preventDefault();
+    setAxiosHeaders();
     axios
-      .post('/api/v1/tacos', {
+      .post("/api/v1/tacos", {
         taco: {
           title: this.titleRef.current.value,
           base: this.baseRef.current.value,
@@ -27,14 +27,15 @@ class TacoForm extends React.Component {
           garnish: this.garnishRef.current.value,
         },
       })
-      .then(response => {
-        const taco = response.data
-        this.props.createTaco(taco)
+      .then((response) => {
+        const taco = response.data;
+        this.props.createTaco(taco);
+        this.props.clearErrors();
       })
-      .catch(error => {
-        console.log(error)
-      })
-    e.target.reset()
+      .catch((error) => {
+        this.props.handleErrors();
+      });
+    e.target.reset();
   }
 
   render() {
@@ -99,12 +100,14 @@ class TacoForm extends React.Component {
           </div>
         </div>
       </form>
-    )
+    );
   }
 }
 
-export default TacoForm
+export default TacoForm;
 
 TacoForm.propTypes = {
   createTaco: PropTypes.func.isRequired,
-}
+  handleErrors: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
+};
